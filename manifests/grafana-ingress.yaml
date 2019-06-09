@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    certmanager.k8s.io/cluster-issuer: letsencrypt-prod
+    kubernetes.io/ingress.class: nginx
+  name: grafana-cosmic-rocks
+  namespace: monitoring
+spec:
+  rules:
+  - host: grafana.cosmic.rocks
+    http:
+      paths:
+      - backend:
+          serviceName: grafana
+          servicePort: http
+        path: /
+  tls:
+  - hosts:
+    - grafana.cosmic.rocks
+    secretName: grafana-cosmic-rocks

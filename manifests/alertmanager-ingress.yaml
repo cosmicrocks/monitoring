@@ -1,0 +1,29 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    certmanager.k8s.io/cluster-issuer: letsencrypt-prod
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/auth-signin: https://$host/oauth2/start
+    nginx.ingress.kubernetes.io/auth-url: https://$host/oauth2/auth
+  name: alertmanager-cosmic-rocks
+  namespace: monitoring
+spec:
+  rules:
+  - host: alertmanager.cosmic.rocks
+    http:
+      paths:
+      - backend:
+          serviceName: alertmanager-cosmic
+          servicePort: web
+  - host: alertmanager.cosmic.rocks
+    http:
+      paths:
+      - backend:
+          serviceName: oauth2-proxy
+          servicePort: http
+        path: /oauth2
+  tls:
+  - hosts:
+    - alertmanager.cosmic.rocks
+    secretName: alertmanager-cosmic-rocks

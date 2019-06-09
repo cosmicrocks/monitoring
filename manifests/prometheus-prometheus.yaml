@@ -1,0 +1,41 @@
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+metadata:
+  labels:
+    prometheus: cosmic
+  name: cosmic
+  namespace: monitoring
+spec:
+  alerting:
+    alertmanagers:
+    - name: alertmanager-cosmic
+      namespace: monitoring
+      port: web
+  baseImage: quay.io/prometheus/prometheus
+  nodeSelector:
+    beta.kubernetes.io/os: linux
+  prometheusExternalLabelName: ""
+  remoteRead:
+  - readRecent: true
+    url: http://adapter.default:9201/read
+  remoteWrite:
+  - url: http://adapter.default:9201/write
+  replicaExternalLabelName: ""
+  replicas: 3
+  resources:
+    requests:
+      cpu: 500m
+      memory: 500Mi
+  retention: 30d
+  ruleSelector:
+    matchLabels:
+      prometheus: cosmic
+      role: alert-rules
+  securityContext:
+    fsGroup: 2000
+    runAsNonRoot: true
+    runAsUser: 1000
+  serviceAccountName: prometheus-cosmic
+  serviceMonitorNamespaceSelector: {}
+  serviceMonitorSelector: {}
+  version: v2.10.0
