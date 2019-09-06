@@ -9,7 +9,7 @@ local conf = import 'config.libsonnet';
     clientSecret: conf.Config.oidc_google_clientSecret,
     namespace: conf.Config.namespace,
     versions+:: {
-      grafana: '6.2.1',
+      grafana: '6.3.5',
     },
     grafana+:: {
       config: {
