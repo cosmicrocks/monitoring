@@ -88,7 +88,7 @@
                     "subdir": "documentation/prometheus-mixin"
                 }
             },
-            "version": "3b3eaf3496f4f709b95b3926272e18719b47bcfc"
+            "version": "970ef41bb68be7c3256c3f5f1670094f547ca36b"
         },
         {
             "name": "node-mixin",
