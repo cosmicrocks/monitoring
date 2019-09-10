@@ -38,7 +38,7 @@ local defaultPrometheusConfiguration = {
       #prometheusExternalLabelName: '',
       #replicaExternalLabelName: '',
       remoteWrite: [{
-        url: 'http://nginx.default.svc/api/prom/push',
+        url: 'http://nginx.cortex.svc/api/prom/push',
         capacity: '1000',
         maxShards: '2000',
         minShards: '1',
