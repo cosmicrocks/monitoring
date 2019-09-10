@@ -1,22 +1,24 @@
 local conf = import 'config.libsonnet';
 
 local defaultPrometheusConfiguration = {
-  local stage = conf.Config.stage,
   prometheus+: {
     metadata+: {
       name: conf.Config.clusterName,
     },
     spec+: {
-      prometheusExternalLabelName: '',
-      replicaExternalLabelName: '',
-      remoteRead: [{
-        readRecent: true,
-        url: 'http://adapter.default:9201/read'
-      }], 
+      #prometheusExternalLabelName: '',
+      #replicaExternalLabelName: '',
       remoteWrite: [{
-        url: 'http://adapter.default:9201/write'
+        url: 'http://nginx.default.svc/api/prom/push',
+        capacity: '1000',
+        maxShards: '2000',
+        minShards: '1',
+        maxSamplesPerSend: '1000',
+        batchSendDeadline: '5s',
+        minBackoff: '30ms',
+        maxBackoff: '100ms',
       }],
-      replicas: 3,
+      replicas: 1,
       resources: {
         requests: {
           memory: '500Mi',

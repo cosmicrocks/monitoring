@@ -7,12 +7,13 @@ local kp =
       clusterName: conf.Config.clusterName,
       namespace: conf.Config.namespace,
 
+      kubeApiserverSelector: 'job="kube-apiserver"',
       alertmanagerSelector: 'job="alertmanager-%s"' % self.clusterName,
 
       versions+:: {
-        prometheusOperator: 'v0.30.0',
-        prometheus: 'v2.10.0',
-        nodeExporter: "v0.18.0",
+        prometheusOperator: 'v0.32.0',
+        prometheus: 'v2.12.0',
+        nodeExporter: "v0.18.1",
       },
 
       prometheus+:: {

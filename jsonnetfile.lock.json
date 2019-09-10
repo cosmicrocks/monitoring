@@ -8,7 +8,7 @@
                     "subdir": "jsonnet/kube-prometheus"
                 }
             },
-            "version": "12da6336af6b61c489ae4788cc18cbb5027100e9"
+            "version": "0038e251654d3410bbaea5ee802b5bcc70724afe"
         },
         {
             "name": "ksonnet",
@@ -28,7 +28,7 @@
                     "subdir": ""
                 }
             },
-            "version": "af494738e1709998696ffbce9296063a20c80692"
+            "version": "6a0450b32a0f3b25299dcca7f40157e21c50d023"
         },
         {
             "name": "grafonnet",
@@ -38,7 +38,7 @@
                     "subdir": "grafonnet"
                 }
             },
-            "version": "bcd95ffa00fc4a58d34832f88f4b366effeb63ad"
+            "version": "69bc267211790a1c3f4ea6e6211f3e8ffe22f987"
         },
         {
             "name": "grafana-builder",
@@ -48,7 +48,7 @@
                     "subdir": "grafana-builder"
                 }
             },
-            "version": "c72a4e622232a051f4d6be8def626e208c687637"
+            "version": "918277932b7e058481e4f227ca4f0e5237d1c2db"
         },
         {
             "name": "grafana",
@@ -58,7 +58,7 @@
                     "subdir": "grafana"
                 }
             },
-            "version": "c27d2792764867cdaf6484f067cc875cb8aef2f6"
+            "version": "7fadaf2274d5cbe4ac6fbaf8786e4b7ecf3c1713"
         },
         {
             "name": "prometheus-operator",
@@ -68,7 +68,7 @@
                     "subdir": "jsonnet/prometheus-operator"
                 }
             },
-            "version": "1b202471cb9847282198ec008b58bd7c34d9d2ff"
+            "version": "d6ba399c064c47fea536f08d438a572588b256da"
         },
         {
             "name": "etcd-mixin",
@@ -78,7 +78,37 @@
                     "subdir": "Documentation/etcd-mixin"
                 }
             },
-            "version": "ea70731f5354bd4c56272a9653caa5e0cc83b288"
+            "version": "594005d7de33c1df5374c0fb7cb53c32eecfc7f2"
+        },
+        {
+            "name": "prometheus",
+            "source": {
+                "git": {
+                    "remote": "https://github.com/prometheus/prometheus",
+                    "subdir": "documentation/prometheus-mixin"
+                }
+            },
+            "version": "3b3eaf3496f4f709b95b3926272e18719b47bcfc"
+        },
+        {
+            "name": "node-mixin",
+            "source": {
+                "git": {
+                    "remote": "https://github.com/prometheus/node_exporter",
+                    "subdir": "docs/node-mixin"
+                }
+            },
+            "version": "7caedccd7333b0f7a26cc4689f0542c1289e929e"
+        },
+        {
+            "name": "promgrafonnet",
+            "source": {
+                "git": {
+                    "remote": "https://github.com/kubernetes-monitoring/kubernetes-mixin",
+                    "subdir": "lib/promgrafonnet"
+                }
+            },
+            "version": "6a0450b32a0f3b25299dcca7f40157e21c50d023"
         }
     ]
 }
