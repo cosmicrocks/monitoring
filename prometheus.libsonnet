@@ -6,6 +6,35 @@ local defaultPrometheusConfiguration = {
       name: conf.Config.clusterName,
     },
     spec+: {
+      tolerations: [
+        {
+          effect: 'NoSchedule',
+          key: 'dedicated',
+          operator: 'Equal',
+          value: 'prometheus'
+        }
+      ],
+          
+      affinity: {
+        nodeAffinity: {
+          requiredDuringSchedulingIgnoredDuringExecution: {
+            nodeSelectorTerms: [
+              {
+                matchExpressions: [
+                  {
+                    key: 'dedicated',
+                    operator: 'In',
+                    values: [
+                      'prometheus'
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+
       #prometheusExternalLabelName: '',
       #replicaExternalLabelName: '',
       remoteWrite: [{
@@ -21,11 +50,11 @@ local defaultPrometheusConfiguration = {
       replicas: 1,
       resources: {
         requests: {
-          memory: '500Mi',
-          cpu: '500m',
+          memory: '96Gi',
+          cpu: '8',
         },
       },
-      retention: '30d',
+      retention: '1d',
     },
   },
 };
