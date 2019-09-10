@@ -56,5 +56,7 @@ local conf = import 'config.libsonnet';
   grafanaDashboards+::
     {
     'postgres.json': (import 'dashboards/postgres.json'),
+    'nginx.json': (import 'dashboards/nginx.json'),
+    'cortex.json': (import 'dashboards/cortex.json')
   },
 }
