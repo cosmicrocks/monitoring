@@ -47,7 +47,7 @@ local defaultPrometheusConfiguration = {
         minBackoff: '30ms',
         maxBackoff: '100ms',
       }],
-      replicas: 1,
+      replicas: 3,
       resources: {
         requests: {
           memory: '96Gi',
