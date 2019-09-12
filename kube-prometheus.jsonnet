@@ -18,6 +18,7 @@ local kp =
 
       prometheus+:: {
         name: $._config.clusterName,
+        namespaces+: ['cortex'],
       },
 
       alertmanager+:: {
