@@ -15,16 +15,16 @@ local servicePort = k.core.v1.service.mixin.spec.portsType;
     domain: conf.Config.domain,
     namespace: conf.Config.namespace,
   },
-  ingressPrometheus+:: {
+  ingressPrometheusExternal+:: {
     ingress:
       ingress.new() +
-      ingress.mixin.metadata.withName('prometheus-' + std.strReplace($._config.domain, '.', '-')) +
+      ingress.mixin.metadata.withName('prometheus-external-' + std.strReplace($._config.domain, '.', '-')) +
       ingress.mixin.metadata.withNamespace($._config.namespace) +
       ingress.mixin.metadata.withAnnotations({
         'kubernetes.io/ingress.class': 'nginx',
-        'certmanager.k8s.io/cluster-issuer': 'letsencrypt-prod',
+        'cert-manager.io/cluster-issuer': 'letsencrypt-prod',
         'nginx.ingress.kubernetes.io/auth-url': 'https://$host/oauth2/auth',
-        'nginx.ingress.kubernetes.io/auth-signin': 'https://$host/oauth2/start',
+        'nginx.ingress.kubernetes.io/auth-signin': 'https://$host/oauth2/start?rd=https://$host$request_uri$is_args$args'
       }) +
       ingress.mixin.spec.withTls(
         ingressTls.new() +
@@ -40,27 +40,46 @@ local servicePort = k.core.v1.service.mixin.spec.portsType;
             httpIngressPath.mixin.backend.withServiceName('prometheus-' + $._config.clusterName) +
             httpIngressPath.mixin.backend.withServicePort('web'),
           ]),
+        ]
+      ),
+  },
+  ingressPrometheusOauth2Proxy+:: {
+    ingress:
+      ingress.new() +
+      ingress.mixin.metadata.withName('prometheus-oauth2-proxy-' + std.strReplace($._config.domain, '.', '-')) +
+      ingress.mixin.metadata.withNamespace('auth-system') +
+      ingress.mixin.metadata.withAnnotations({
+        'kubernetes.io/ingress.class': 'nginx',
+        'cert-manager.io/cluster-issuer': 'letsencrypt-prod'
+      }) +
+      ingress.mixin.spec.withTls(
+        ingressTls.new() +
+        ingressTls.withHosts('prometheus.' + $._config.domain) +
+        ingressTls.withSecretName('prometheus-' + std.strReplace($._config.domain, '.', '-'))
+      ) +
+      ingress.mixin.spec.withRules(
+        [
           ingressRule.new() +
           ingressRule.withHost('prometheus.' + $._config.domain) +
           ingressRule.mixin.http.withPaths([
             httpIngressPath.new() +
             httpIngressPath.withPath('/oauth2') +
             httpIngressPath.mixin.backend.withServiceName('oauth2-proxy') +
-            httpIngressPath.mixin.backend.withServicePort('http'),
+            httpIngressPath.mixin.backend.withServicePort(4180),
           ]),
         ]
       ),
   },
-  ingressAlertManager+:: {
+  ingressAlertManagerExternal+:: {
     ingress:
       ingress.new() +
-      ingress.mixin.metadata.withName('alertmanager-' + std.strReplace($._config.domain, '.', '-')) +
+      ingress.mixin.metadata.withName('alertmanager-external-' + std.strReplace($._config.domain, '.', '-')) +
       ingress.mixin.metadata.withNamespace($._config.namespace) +
       ingress.mixin.metadata.withAnnotations({
         'kubernetes.io/ingress.class': 'nginx',
-        'certmanager.k8s.io/cluster-issuer': 'letsencrypt-prod',
+        'cert-manager.io/cluster-issuer': 'letsencrypt-prod',
         'nginx.ingress.kubernetes.io/auth-url': 'https://$host/oauth2/auth',
-        'nginx.ingress.kubernetes.io/auth-signin': 'https://$host/oauth2/start',
+        'nginx.ingress.kubernetes.io/auth-signin': 'https://$host/oauth2/start?rd=https://$host$request_uri$is_args$args'
       }) +
       ingress.mixin.spec.withTls(
         ingressTls.new() +
@@ -76,13 +95,34 @@ local servicePort = k.core.v1.service.mixin.spec.portsType;
             httpIngressPath.mixin.backend.withServiceName('alertmanager-' + $._config.clusterName) +
             httpIngressPath.mixin.backend.withServicePort('web'),
           ]),
+        ]
+      ),
+  },
+  ingressAlertManagerOauth2Proxy+:: {
+    ingress:
+      ingress.new() +
+      ingress.mixin.metadata.withName('alertmanager-oauth2-proxy-' + std.strReplace($._config.domain, '.', '-')) +
+      ingress.mixin.metadata.withNamespace('auth-system') +
+      ingress.mixin.metadata.withAnnotations({
+        'kubernetes.io/ingress.class': 'nginx',
+        'cert-manager.io/cluster-issuer': 'letsencrypt-prod',
+        'nginx.ingress.kubernetes.io/auth-url': 'https://$host/oauth2/auth',
+        'nginx.ingress.kubernetes.io/auth-signin': 'https://$host/oauth2/start?rd=https://$host$request_uri$is_args$args'
+      }) +
+      ingress.mixin.spec.withTls(
+        ingressTls.new() +
+        ingressTls.withHosts('alertmanager.' + $._config.domain) +
+        ingressTls.withSecretName('alertmanager-' + std.strReplace($._config.domain, '.', '-'))
+      ) +
+      ingress.mixin.spec.withRules(
+        [
           ingressRule.new() +
           ingressRule.withHost('alertmanager.' + $._config.domain) +
           ingressRule.mixin.http.withPaths([
             httpIngressPath.new() +
             httpIngressPath.withPath('/oauth2') +
             httpIngressPath.mixin.backend.withServiceName('oauth2-proxy') +
-            httpIngressPath.mixin.backend.withServicePort('http'),
+            httpIngressPath.mixin.backend.withServicePort(4180),
           ]),
         ]
       ),
@@ -94,7 +134,7 @@ local servicePort = k.core.v1.service.mixin.spec.portsType;
       ingress.mixin.metadata.withNamespace($._config.namespace) +
       ingress.mixin.metadata.withAnnotations({
         'kubernetes.io/ingress.class': 'nginx',
-        'certmanager.k8s.io/cluster-issuer': 'letsencrypt-prod',
+        'cert-manager.io/cluster-issuer': 'letsencrypt-prod',
       }) +
       ingress.mixin.spec.withTls(
         ingressTls.new() +

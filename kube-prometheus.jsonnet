@@ -11,8 +11,8 @@ local kp =
       alertmanagerSelector: 'job="alertmanager-%s"' % self.clusterName,
 
       versions+:: {
-        prometheusOperator: 'v0.32.0',
-        prometheus: 'v2.12.0',
+        prometheusOperator: 'v0.33.0',
+        prometheus: 'v2.13.1',
         nodeExporter: "v0.18.1",
       },
 
@@ -27,8 +27,10 @@ local kp =
 
     },
     prometheus+:: (import 'prometheus.libsonnet').prometheus,
-    ingressPrometheus+:: (import 'ingress.libsonnet').ingressPrometheus,
-    ingressAlertManager+:: (import 'ingress.libsonnet').ingressAlertManager,
+    ingressPrometheusExternal+:: (import 'ingress.libsonnet').ingressPrometheusExternal,
+    ingressPrometheusOauth2Proxy+:: (import 'ingress.libsonnet').ingressPrometheusOauth2Proxy,
+    ingressAlertManagerExternal+:: (import 'ingress.libsonnet').ingressAlertManagerExternal,
+    ingressAlertManagerOauth2Proxy+:: (import 'ingress.libsonnet').ingressAlertManagerOauth2Proxy,
     grafana+:: (import 'grafana.libsonnet').grafana,
     ingressGrafana+:: (import 'ingress.libsonnet').ingressGrafana,
   };
@@ -40,9 +42,11 @@ local manifests =
   { ['kube-state-metrics-' + name]: kp.kubeStateMetrics[name] for name in std.objectFields(kp.kubeStateMetrics) } +
   { ['alertmanager-' + name]: kp.alertmanager[name] for name in std.objectFields(kp.alertmanager) } +
   { ['prometheus-' + name]: kp.prometheus[name] for name in std.objectFields(kp.prometheus) } +
-  { ['prometheus-' + name]: kp.ingressPrometheus[name] for name in std.objectFields(kp.ingressPrometheus) } +
+  { ['prometheus-external-' + name]: kp.ingressPrometheusExternal[name] for name in std.objectFields(kp.ingressPrometheusExternal) } +
+  { ['prometheus-oauth2-proxy-' + name]: kp.ingressPrometheusOauth2Proxy[name] for name in std.objectFields(kp.ingressPrometheusOauth2Proxy) } +
   { ['prometheus-adapter' + name]: kp.prometheusAdapter[name] for name in std.objectFields(kp.prometheusAdapter) } +
-  { ['alertmanager-' + name]: kp.ingressAlertManager[name] for name in std.objectFields(kp.ingressAlertManager) } +
+  { ['alertmanager-exeternal-' + name]: kp.ingressAlertManagerExternal[name] for name in std.objectFields(kp.ingressAlertManagerExternal) } +
+  { ['alertmanager-oauth2-proxy-' + name]: kp.ingressAlertManagerOauth2Proxy[name] for name in std.objectFields(kp.ingressAlertManagerOauth2Proxy) } +
   { ['grafana-' + name]: kp.grafana[name] for name in std.objectFields(kp.grafana) } +
   { ['grafana-' + name]: kp.ingressGrafana[name] for name in std.objectFields(kp.ingressGrafana) };
 

@@ -9,7 +9,7 @@ local conf = import 'config.libsonnet';
     clientSecret: conf.Config.oidc_google_clientSecret,
     namespace: conf.Config.namespace,
     versions+:: {
-      grafana: '6.3.5',
+      grafana: '6.4.3',
     },
     grafana+:: {
       config: {
@@ -27,13 +27,13 @@ local conf = import 'config.libsonnet';
           security: {
             admin_user: conf.Config.admin_user,
           },
-          'auth.google': {
+          'auth.generic_oauth': {
             enabled: true,
             client_id: $._config.clientId,
             client_secret: $._config.clientSecret,
-            scopes: 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
-            auth_url: 'https://accounts.google.com/o/oauth2/auth',
-            token_url: 'https://accounts.google.com/o/oauth2/token',
+            scopes: 'openid profile email offline_access',
+            auth_url: 'https://dex.%s/auth' % conf.Config.domain ,
+            token_url: 'https://dex.%s/token' % conf.Config.domain,
             allowed_domains: conf.Config.allowed_domains,
             allow_sign_up: true,
           },
